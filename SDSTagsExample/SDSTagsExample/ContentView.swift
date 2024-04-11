@@ -12,7 +12,7 @@ import SDSNSUIBridge
 import SDSView
 import Combine
 
-let tags: Set<Tag> = [ Tag("Tokyo"), Tag("Nagoya"), Tag("Yokohama") ]
+let tags: [Tag] = [ Tag("Tokyo"), Tag("Nagoya"), Tag("Yokohama"), Tag("Toyama") ]
 
 struct ContentView: View {
     @State var items: [TaggableItem] = []
@@ -20,14 +20,13 @@ struct ContentView: View {
     @State private var changeState = false
     var body: some View {
         VStack {
-            Text("Item title: \(item.title)")
-
-            Text("Tags: \(item.tags.map({ $0.displayName }).joined(separator: ","))")
+            Text("Item title: \(item.title) tags: \(item.tagsString)")
+                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text("Tags:")
+                TagField(element: item, selectableTags: tags)
+            }
             
-            TagField(element: item, selectableTags: tags)
-            
-            Text("change only exist in tokenField: \(changeState)")
-
             
             List(items) { item in
                 HStack {
@@ -87,12 +86,13 @@ struct Tag: TagProtocol, Hashable {
 
 
 class TaggableItem: Taggable, Identifiable, ObservableObject {
+    typealias TagType = Tag
     var id: String { self.title }
-    @Published var tags: [any SDSTags.TagProtocol]
+    @Published var tags: Set<TagType>
     
     @Published var title: String
     
-    init(title: String, tags: [any TagProtocol]) {
+    init(title: String, tags: Set<TagType>) {
         self.title = title
         self.tags = tags
     }

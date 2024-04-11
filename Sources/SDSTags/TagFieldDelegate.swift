@@ -16,21 +16,22 @@ extension OSLog {
 
 #if os(macOS)
 // DesignNote: representObject is String (not any TagProtocol)
-public class TagFieldDelegate<T: TagProtocol>: NSObject, NSTokenFieldDelegate {
-    public var taggableElement: (any Taggable)? = nil
-    let selectableTags: Set<T>
+public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
+    public var taggableElement: E? = nil
+    let selectableTags: [E.TagType] // Note: not Set because order in array will be reflected to display order (basically)
     
     let noCompletionString = "No Completion"
     
     // TODO: maybe need to send difference or before/after
     public let needsUpdate: PassthroughSubject<Bool,Never> = PassthroughSubject()
     
-    public init(selectableTags: Set<T>) {
+    public init(selectableTags: [E.TagType]) {
         self.selectableTags = selectableTags
         super.init()
     }
 
     public func controlTextDidChange(_ obj: Notification) {
+        OSLog.log.debug(#function)
         guard let tokenField = obj.object as? NSTokenField,
               let stringArray = tokenField.objectValue as? [String] else { return }
         guard let taggableElement else { fatalError("set taggableElement first") }
@@ -50,15 +51,19 @@ public class TagFieldDelegate<T: TagProtocol>: NSObject, NSTokenFieldDelegate {
               let stringArray = tokenField.objectValue as? [String] else { return }
         let tags = stringArray.compactMap({ selectableTags.firstTag(name: $0) })
 
-        guard var taggableElement else { fatalError("set taggableElement first") }
-
+        guard let taggableElement = taggableElement else { fatalError("set taggableElement first") }
         let oldTagStrArray = taggableElement.tags.map({ $0.displayName })
         
         if !oldTagStrArray.sameContents(stringArray) {
-            needsUpdate.send(true)
-            taggableElement.tags = tags
+            updateElement(Set(tags))
         }
         tokenField.backgroundColor = .textBackgroundColor
+    }
+    
+    func updateElement(_ tags: Set<E.TagType>) {
+        guard var taggableElement = taggableElement else { fatalError("set taggableElement first") }
+        needsUpdate.send(true)
+        taggableElement.tags = tags
     }
 
     public func tokenField(_ tokenField: NSTokenField, completionsForSubstring substring: String,

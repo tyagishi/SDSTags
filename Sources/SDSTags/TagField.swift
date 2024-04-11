@@ -14,12 +14,12 @@ extension OSLog {
 }
 
 #if os(macOS)
-public struct TagField<T: TagProtocol>: NSViewRepresentable {
+public struct TagField<E: Taggable>: NSViewRepresentable {
     public typealias NSViewType = NSTokenField
-    let element: any Taggable
-    let tagFieldDelegate: TagFieldDelegate<T>
+    let element: E
+    let tagFieldDelegate: TagFieldDelegate<E>
     
-    public init(element: any Taggable, selectableTags: Set<T>) {
+    public init(element: E, selectableTags: [E.TagType]) {
         // OSLog.log.debug(#function)
         self.element = element
         self.tagFieldDelegate = TagFieldDelegate(selectableTags: selectableTags)
