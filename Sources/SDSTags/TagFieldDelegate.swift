@@ -60,17 +60,29 @@ public class TagFieldDelegate<T: TagProtocol>: NSObject, NSTokenFieldDelegate {
         }
         tokenField.backgroundColor = .textBackgroundColor
     }
-    
+
     public func tokenField(_ tokenField: NSTokenField, completionsForSubstring substring: String,
                            indexOfToken tokenIndex: Int, indexOfSelectedItem selectedIndex: UnsafeMutablePointer<Int>?) -> [Any]? {
         OSLog.log.debug(#function)
         guard let strings = tokenField.objectValue as? [String] else { return [] }
 
-        // TODO: may needs to sort completions along similarity
-        let completion = selectableTags
-            .filter({ !strings.containString($0.displayName) })
-            .map({ $0.displayName })
-            //.filter({ $0.hasPrefix(substring) })
+        let restTagNames = selectableTags.map({ $0.displayName }).filter({ !strings.contains($0) })
+
+        // MARK: may need to be controlled from outside (case sensitive?, checking prefix is too much?, need to hide unrelated?, ...)
+        var prio1: [String] = []
+        var prio2: [String] = []
+        var prio3: [String] = []
+        for name in restTagNames {
+            if name.hasSuffix(substring) { prio1.append(name)
+            } else if name.contains(substring) { prio2.append(name)
+            } else { prio3.append(name)}
+        }
+        
+        prio1.sort()
+        prio2.sort()
+        prio3.sort()
+
+        let completion = prio1 + prio2 + prio3
         
         guard !completion.isEmpty else { return [noCompletionString] }
         return completion
