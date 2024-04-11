@@ -20,6 +20,21 @@ public protocol TagList {
     var displayNames: [String] { get }
 }
 
-//extension Collection where Element == any TagProtocol {
-//    func contain
-//}
+// MARK: convenient method for [any TagProtocol]
+extension Collection where Element: TagProtocol {
+    func firstTag(name: String) -> (any TagProtocol)? {
+        first(where: { $0.displayName == name })
+    }
+}
+
+// MARK: convenient method for [String]
+extension Array where Element == String {
+    func containString(_ elem: String) -> Bool {
+        return first(where: { $0 == elem }) != nil
+    }
+    
+    func sameContents(_ another: [Element]) -> Bool {
+        return self.sorted().elementsEqual(another.sorted())
+    }
+}
+

@@ -30,10 +30,6 @@ public class TagFieldDelegate<T: TagProtocol>: NSObject, NSTokenFieldDelegate {
         super.init()
     }
 
-    deinit {
-        print("deinit")
-    }
-    
     public func controlTextDidChange(_ obj: Notification) {
         guard let tokenField = obj.object as? NSTokenField,
               let stringArray = tokenField.objectValue as? [String] else { return }
@@ -86,18 +82,3 @@ public class TagFieldDelegate<T: TagProtocol>: NSObject, NSTokenFieldDelegate {
     }
 }
 #endif
-
-extension Array where Element == String {
-    func containString(_ elem: String) -> Bool {
-        return first(where: { $0 == elem }) != nil
-    }
-    
-    func sameContents(_ another: [Element]) -> Bool {
-        return self.sorted().elementsEqual(another.sorted())
-    }
-}
-extension Collection where Element: TagProtocol {
-    func firstTag(name: String) -> (any TagProtocol)? {
-        first(where: { $0.displayName == name })
-    }
-}
