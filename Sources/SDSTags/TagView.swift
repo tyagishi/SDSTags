@@ -7,21 +7,30 @@
 
 import SwiftUI
 
-struct TagView<T: Taggable>: View {
-    let element: T
+public struct TagView<T: Taggable & ObservableObject>: View {
+    @ObservedObject var element: T
     
-    init(element: T) {
+    let cornerRadius = 3.0
+    let lineWidth = 0.5
+    
+    public init(element: T) {
         self.element = element
     }
     
-    var body: some View {
-        VStack {
-            Text("Not implemented")
-            Text(element.tagsString)
+    public var body: some View {
+        // TODO: should be able to custom shape stype
+        HStack {
+            ForEach(element.tags.map({$0})) { tag in
+                Text(tag.displayName)
+                    .padding(.horizontal, 2)
+                    .padding(.vertical, 1)
+                    .background(.blue.opacity(0.3))
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .stroke(.blue, lineWidth: lineWidth)
+                    )
+            }
         }
     }
 }
-
-//#Preview {
-//    Tag(element: <#T##any Taggable#>)
-//}

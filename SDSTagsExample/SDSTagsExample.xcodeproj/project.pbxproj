@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36124D952BC7F06E00AF78A5 /* SDSCustomView in Frameworks */ = {isa = PBXBuildFile; productRef = 36124D942BC7F06E00AF78A5 /* SDSCustomView */; };
 		36D601F92BC666A9003C560D /* SDSTagsExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */; };
 		36D601FB2BC666A9003C560D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D601FA2BC666A9003C560D /* ContentView.swift */; };
 		36D601FD2BC666AB003C560D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36D601FC2BC666AB003C560D /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		36124D962BC80A6600AF78A5 /* SDSCustomView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SDSCustomView; path = ../../SDSCustomView; sourceTree = "<group>"; };
 		36D601F52BC666A9003C560D /* SDSTagsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDSTagsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDSTagsExampleApp.swift; sourceTree = "<group>"; };
 		36D601FA2BC666A9003C560D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -31,6 +33,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36D6020D2BC6AC72003C560D /* SDSView in Frameworks */,
+				36124D952BC7F06E00AF78A5 /* SDSCustomView in Frameworks */,
 				36D6020A2BC6675B003C560D /* SDSTags in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,6 +44,7 @@
 		36D601EC2BC666A9003C560D = {
 			isa = PBXGroup;
 			children = (
+				36124D962BC80A6600AF78A5 /* SDSCustomView */,
 				36D602072BC66717003C560D /* SDSTags */,
 				36D601F72BC666A9003C560D /* SDSTagsExample */,
 				36D601F62BC666A9003C560D /* Products */,
@@ -102,6 +106,7 @@
 			packageProductDependencies = (
 				36D602092BC6675B003C560D /* SDSTags */,
 				36D6020C2BC6AC72003C560D /* SDSView */,
+				36124D942BC7F06E00AF78A5 /* SDSCustomView */,
 			);
 			productName = SDSTagsExample;
 			productReference = 36D601F52BC666A9003C560D /* SDSTagsExample.app */;
@@ -133,6 +138,7 @@
 			mainGroup = 36D601EC2BC666A9003C560D;
 			packageReferences = (
 				36D6020B2BC6AC72003C560D /* XCRemoteSwiftPackageReference "SDSView" */,
+				36124D932BC7F06E00AF78A5 /* XCRemoteSwiftPackageReference "SDSCustomView" */,
 			);
 			productRefGroup = 36D601F62BC666A9003C560D /* Products */;
 			projectDirPath = "";
@@ -382,6 +388,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		36124D932BC7F06E00AF78A5 /* XCRemoteSwiftPackageReference "SDSCustomView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tyagishi/SDSCustomView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 		36D6020B2BC6AC72003C560D /* XCRemoteSwiftPackageReference "SDSView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/tyagishi/SDSView";
@@ -393,6 +407,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		36124D942BC7F06E00AF78A5 /* SDSCustomView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 36124D932BC7F06E00AF78A5 /* XCRemoteSwiftPackageReference "SDSCustomView" */;
+			productName = SDSCustomView;
+		};
 		36D602092BC6675B003C560D /* SDSTags */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SDSTags;
