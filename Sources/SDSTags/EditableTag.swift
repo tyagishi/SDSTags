@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct EditableTagView<T: Taggable & ObservableObject>: View {
+public struct EditableTag<T: Taggable & ObservableObject>: View {
     @ObservedObject var element: T
     let selectableTags: [T.TagType]
 //    @Binding var value: String
@@ -17,18 +17,18 @@ public struct EditableTagView<T: Taggable & ObservableObject>: View {
     }
     @FocusState private var fieldFocus: Bool
     let editClick: Int
-    //let placeholder: String
+    let placeholder: String?
     let editIcon: Image
     
     public init(element: T, selectableTags: [T.TagType],
                 //value: Binding<String>,
-                //placeholder: String = "",
+                placeholder: String? = nil,
                 editIcon: Image = Image(systemName: "pencil"),
                 editClick: Int = 1, alignment: Alignment = .leading) {
         self.element = element
         self.selectableTags = selectableTags
         //self._value = value
-        //self.placeholder = placeholder
+        self.placeholder = placeholder
         self.editIcon = editIcon
         self.alignment = alignment
         self.editClick = editClick
@@ -37,20 +37,27 @@ public struct EditableTagView<T: Taggable & ObservableObject>: View {
     public var body: some View {
         HStack {
             if underEditing {
-                TagField(element: element, selectableTags: selectableTags)
+                TagField(element: element, selectableTags: selectableTags, placeholder: placeholder)
                     .focused($fieldFocus)
-                    .onSubmit { underEditing.toggle() }
+                    .onSubmit { underEditing.toggle(); print("toggle") } // never called
             } else {
                 TagView(element: element)
-//                Text(value)
+                //                Text(value)
                     .frame(maxWidth: .infinity, alignment: alignment)
                     .contentShape(Rectangle())
                     .onTapGesture(count: editClick, perform: { underEditing.toggle() })
             }
-            Button(action: { underEditing.toggle()}, label: { editIcon })
+            Button(action: { underEditing.toggle() }, label: { editIcon })
         }
-        .onChange(of: fieldFocus) { _ in
+        .onChange(of: fieldFocus) {
             if !fieldFocus { underEditing = false }
         }
+//        .overlay {
+//            if !underEditing,
+//               element.tags.isEmpty,
+//               let placeholder = placeholder {
+//                Text(placeholder).opacity(0.5).frame(maxWidth: .infinity, alignment: alignment)
+//            }
+//        }
     }
 }
