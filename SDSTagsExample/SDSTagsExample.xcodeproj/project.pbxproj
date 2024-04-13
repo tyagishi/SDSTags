@@ -17,7 +17,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		36124D962BC80A6600AF78A5 /* SDSCustomView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SDSCustomView; path = ../../SDSCustomView; sourceTree = "<group>"; };
 		36D601F52BC666A9003C560D /* SDSTagsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDSTagsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDSTagsExampleApp.swift; sourceTree = "<group>"; };
 		36D601FA2BC666A9003C560D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,7 +43,6 @@
 		36D601EC2BC666A9003C560D = {
 			isa = PBXGroup;
 			children = (
-				36124D962BC80A6600AF78A5 /* SDSCustomView */,
 				36D602072BC66717003C560D /* SDSTags */,
 				36D601F72BC666A9003C560D /* SDSTagsExample */,
 				36D601F62BC666A9003C560D /* Products */,

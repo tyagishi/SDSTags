@@ -9,13 +9,19 @@ import Foundation
 
 public protocol Taggable<TagType> where TagType: TagProtocol {
     associatedtype TagType
+
     var tags: Set<TagType> { get set }
 }
 
 public extension Taggable {
+    var tagArray: [TagType] {
+        tags.sorted(by: { $0.displayName < $1.displayName })
+    }
+
     func hasTag(_ tag: TagType) -> Bool {
         tags.contains(where: { $0.id == tag.id })
     }
+
     var tagsString: String {
         tags.tagsString()
     }
@@ -41,7 +47,7 @@ extension Collection where Element: TagProtocol {
         map({ $0.displayName }).joined(separator: separator)
     }
     public func tagFrom(strings: [String]) -> [Element] {
-        strings.compactMap({ self.firstTag(name:$0) })
+        strings.compactMap({ self.firstTag(name: $0) })
     }
 }
 
@@ -55,4 +61,3 @@ extension Array where Element == String {
         return self.sorted().elementsEqual(another.sorted())
     }
 }
-

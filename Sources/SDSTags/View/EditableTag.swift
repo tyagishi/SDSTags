@@ -6,11 +6,20 @@
 //
 
 import SwiftUI
+import Combine
+import NotificationCenter
+import OSLog
+
+let editableTagFocusLooseRequestNotification = Notification.Name("EditableTagFocusLooseRequestNotification")
+
+extension OSLog {
+    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "EditableTag")
+    //fileprivate static var log = Logger(.disabled)
+}
 
 public struct EditableTag<T: Taggable & ObservableObject>: View {
     @ObservedObject var element: T
     let selectableTags: [T.TagType]
-//    @Binding var value: String
     let alignment: Alignment
     @State private var underEditing = false {
         didSet { if underEditing { fieldFocus = true } }
@@ -52,6 +61,12 @@ public struct EditableTag<T: Taggable & ObservableObject>: View {
         .onChange(of: fieldFocus) {
             if !fieldFocus { underEditing = false }
         }
+        .onReceive(NotificationCenter.default.publisher(for: editableTagFocusLooseRequestNotification)) { notification in
+            OSLog.log.debug("onReceive")
+            underEditing = false
+            fieldFocus = false
+        }
+//        .onReceive(NotificationCenter.publisher.
 //        .overlay {
 //            if !underEditing,
 //               element.tags.isEmpty,

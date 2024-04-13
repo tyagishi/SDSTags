@@ -1,6 +1,6 @@
 # SDSTags
 
-library for handling Tags incl. views.
+library for Tags incl. views.
 
 ## Protocol
 - TagProtocol
@@ -9,11 +9,13 @@ library for handling Tags incl. views.
    protocol for the element which can have (multiple) tags
 
 ## View
+- EditableTag
+   combined TagField/TagView
+   with click, toggle TagField/TagView
+
 - TagField / SwiftUI (only for macOS, based on NSTokenField)
    View for editing Taggable-element tags.
    
-- TagView / SwiftUI (under implementation)
+- TagView / SwiftUI
    View for showing Tags
    
-## supplementals
-- TagHLayout / SwiftUI (not implemented yet)

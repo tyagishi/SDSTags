@@ -20,7 +20,7 @@ public struct TagView<T: Taggable & ObservableObject>: View {
     public var body: some View {
         // TODO: should be able to custom shape stype
         HStack {
-            ForEach(element.tags.map({$0})) { tag in
+            ForEach(element.tagArray) { tag in
                 Text(tag.displayName)
                     .padding(.horizontal, 2)
                     .padding(.vertical, 1)

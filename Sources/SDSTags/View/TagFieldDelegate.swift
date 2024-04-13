@@ -36,6 +36,8 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
               let stringArray = tokenField.objectValue as? [String] else { return }
         guard let taggableElement else { fatalError("set taggableElement first") }
 
+        // TODO: need to know which chars are actually typed, which chars are complemented?
+        
         let oldTagStrArray = taggableElement.tags.map({ $0.displayName })
 
         if !oldTagStrArray.sameContents(stringArray) {
@@ -46,7 +48,7 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     }
 
     public func controlTextDidEndEditing(_ obj: Notification) {
-        //OSLog.log.debug("controlTextDidChange \(obj)")
+        OSLog.log.debug("controlTextDidChange \(obj)")
         guard let tokenField = obj.object as? NSTokenField,
               let stringArray = tokenField.objectValue as? [String] else { return }
         let tags = stringArray.compactMap({ selectableTags.firstTag(name: $0) })
@@ -58,6 +60,8 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
             updateElement(Set(tags))
         }
         tokenField.backgroundColor = .textBackgroundColor
+        let notification = Notification(name: editableTagFocusLooseRequestNotification)
+        NotificationCenter.default.post(notification)
     }
     
     func updateElement(_ tags: Set<E.TagType>) {
@@ -73,7 +77,7 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
 
         let restTagNames = selectableTags.map({ $0.displayName }).filter({ !strings.contains($0) })
 
-        // MARK: may need to be controlled from outside (case sensitive?, checking prefix is too much?, need to hide unrelated?, ...)
+        // MARK: may need to be controlled from outside (like case sensitive?, checking prefix is too much?, need to hide unrelated?, ...)
         var prio1: [String] = []
         var prio2: [String] = []
         var prio3: [String] = []
@@ -91,6 +95,11 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         
         guard !completion.isEmpty else { return [noCompletionString] }
         return completion
+    }
+    
+    public func tokenField(_ tokenField: NSTokenField, editingStringForRepresentedObject representedObject: Any) -> String? {
+        if let repre = representedObject as? String? { return repre }
+        return nil
     }
     
     public func tokenField(_ tokenField: NSTokenField, shouldAdd tokens: [Any], at index: Int) -> [Any] {

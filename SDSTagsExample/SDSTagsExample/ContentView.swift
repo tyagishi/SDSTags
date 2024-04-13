@@ -10,60 +10,42 @@ import SDSTags
 import OSLog
 import SDSNSUIBridge
 import SDSView
+import SDSCustomView
 import Combine
 
-let tags: [Tag] = [ Tag("Tokyo"), Tag("Nagoya"), Tag("Yokohama"), Tag("Toyama") ]
+let tags: [Tag] = [ Tag("SoftDrink"), Tag("Water"), Tag("Coffee"), Tag("BlackTea"), Tag("GreenTea"),  Tag("Beer") ]
 
 struct ContentView: View {
     @State var items: [TaggableItem] = []
-    @StateObject var item: TaggableItem = TaggableItem(title: "Taggable", tags: [])
+    @StateObject var item: TaggableItem = TaggableItem(title: "Order", tags: [])
     @State private var changeState = false
+    @State private var index = 1
     var body: some View {
         VStack {
-            Text("Item title: \(item.title) tags: \(item.tagsString)")
-                .frame(maxWidth: .infinity, alignment: .leading)
             HStack {
-                Text("Tags:")
-                TagField(element: item, selectableTags: tags)
+                EditableText(value: $item.title)
+                //Text("Item title: \(item.title) tags:")
+                //TagField(element: item, selectableTags: tags)
+                EditableTag(element: item, selectableTags: tags, placeholder: "Order")
             }
-            
-            
-            List(items) { item in
+            TagView(element: item)
+            List($items) { $item in
                 HStack {
-                    Text(item.title)
-                    
+                    EditableText(value: $item.title)
+                        .indirectEdit()
+                    EditableTag(element: item, selectableTags: tags)
                 }
             }
+            .scrollContentBackground(.hidden)
             Button(action: {
-                let title = String(Int(Date().timeIntervalSinceReferenceDate))
-                guard items.first(where: { $0.id == title }) == nil else { return }
-                items.append(TaggableItem(title: title, tags: []))
+                let customerName = "Customer\(index)"
+                index += 1
+                items.append(TaggableItem(title: customerName, tags: []))
             }, label: {
                 Text("add new")
             })
-            
-            
-//            ScrollTextView(text: .constant("Hello world!"),
-//                           textViewFactory: textViewFactory,
-//                           textViewUpdate: textViewUpdate)
-            
         }
         .padding()
-    }
-    
-    func textViewFactory() -> (NSUITextView, NSUIScrollView) {
-        let scrollView = NSUIScrollView()
-        scrollView.hasVerticalScroller = true
-        scrollView.hasHorizontalScroller = false
-        
-        let textView = NSUITextView(frame: .zero)
-        textView.autoresizingMask = [.height, .width]
-        scrollView.documentView = textView
-        return (textView, scrollView)
-    }
-    
-    func textViewUpdate(_ textView: NSUITextView,_ scrollView: NSUIScrollView, _ text: String) {
-        return
     }
 }
 
