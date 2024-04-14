@@ -11,7 +11,8 @@ import SwiftUI
 import OSLog
 
 extension OSLog {
-    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "TagFieldDelegate")
+    //fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "TagFieldDelegate")
+    fileprivate static var log = Logger(.disabled)
 }
 
 #if os(macOS)
