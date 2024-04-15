@@ -11,9 +11,13 @@ public protocol Taggable<TagType> where TagType: TagProtocol {
     associatedtype TagType
 
     var refTags: Set<TagType> { get set }
+    var displayTags: [TagType] { get }
 }
 
 public extension Taggable {
+    var displayTags: [TagType] {
+        Array(refTags)
+    }
     var tagArray: [TagType] {
         refTags.sorted(by: { $0.displayName < $1.displayName })
     }

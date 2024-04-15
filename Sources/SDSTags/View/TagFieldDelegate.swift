@@ -21,7 +21,7 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     public var taggableElement: E? = nil
     let selectableTags: [E.TagType] // Note: not Set because order in array will be reflected to display order (basically)
 
-    let getSet: (getter: (E) -> Set<E.TagType>, setter: (E, Set<E.TagType>) -> Void)?
+    let getSet: EditableTagGetSet<E>?
 
     let noCompletionString = "No Completion"
     
@@ -29,17 +29,17 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     public let needsUpdate: PassthroughSubject<Bool,Never> = PassthroughSubject()
 
     public init(selectableTags: [E.TagType],
-                getSet: (getter: (E) -> Set<E.TagType>, setter: (E, Set<E.TagType>) -> Void)? ) {
+                getSet: EditableTagGetSet<E>? ) {
         self.selectableTags = selectableTags
         self.getSet = getSet
         super.init()
     }
     
-    func tagsFrom(element: E) -> Set<E.TagType> {
+    func tagsFrom(element: E) -> [E.TagType] {
         if let getSet = getSet {
             return getSet.getter(element)
         }
-        return element.refTags
+        return element.displayTags
     }
     
     public func controlTextDidChange(_ obj: Notification) {

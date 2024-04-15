@@ -17,8 +17,8 @@ extension OSLog {
     //fileprivate static var log = Logger(.disabled)
 }
 
-public typealias EditableTagGet<E: Taggable> = (E) -> Set<E.TagType>
-public typealias EditableTagGetSet<E: Taggable> = (getter: (E) -> Set<E.TagType>, setter: (E, Set<E.TagType>) -> Void)
+public typealias EditableTagGet<E: Taggable> = (E) -> [E.TagType]
+public typealias EditableTagGetSet<E: Taggable> = (getter: (E) -> [E.TagType], setter: (E, Set<E.TagType>) -> Void)
 
 public struct EditableTag<T: Taggable & ObservableObject>: View {
     @ObservedObject var element: T

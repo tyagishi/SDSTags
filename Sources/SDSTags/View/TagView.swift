@@ -36,10 +36,10 @@ public struct TagView<T: Taggable & ObservableObject>: View {
         }
     }
     
-    func tagsFrom(element: T) -> Set<T.TagType> {
+    func tagsFrom(element: T) -> [T.TagType] {
         if let getter = getter {
             return getter(element)
         }
-        return element.refTags
+        return element.displayTags
     }
 }
