@@ -10,20 +10,20 @@ import Foundation
 public protocol Taggable<TagType> where TagType: TagProtocol {
     associatedtype TagType
 
-    var tags: Set<TagType> { get set }
+    var refTags: Set<TagType> { get set }
 }
 
 public extension Taggable {
     var tagArray: [TagType] {
-        tags.sorted(by: { $0.displayName < $1.displayName })
+        refTags.sorted(by: { $0.displayName < $1.displayName })
     }
 
     func hasTag(_ tag: TagType) -> Bool {
-        tags.contains(where: { $0.id == tag.id })
+        refTags.contains(where: { $0.id == tag.id })
     }
 
     var tagsString: String {
-        tags.tagsString()
+        refTags.tagsString()
     }
 }
 

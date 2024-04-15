@@ -20,17 +20,28 @@ extension OSLog {
 public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     public var taggableElement: E? = nil
     let selectableTags: [E.TagType] // Note: not Set because order in array will be reflected to display order (basically)
-    
+
+    let getSet: (getter: (E) -> Set<E.TagType>, setter: (E, Set<E.TagType>) -> Void)?
+
     let noCompletionString = "No Completion"
     
     // TODO: maybe need to send difference or before/after
     public let needsUpdate: PassthroughSubject<Bool,Never> = PassthroughSubject()
-    
-    public init(selectableTags: [E.TagType]) {
+
+    public init(selectableTags: [E.TagType],
+                getSet: (getter: (E) -> Set<E.TagType>, setter: (E, Set<E.TagType>) -> Void)? ) {
         self.selectableTags = selectableTags
+        self.getSet = getSet
         super.init()
     }
-
+    
+    func tagsFrom(element: E) -> Set<E.TagType> {
+        if let getSet = getSet {
+            return getSet.getter(element)
+        }
+        return element.refTags
+    }
+    
     public func controlTextDidChange(_ obj: Notification) {
         OSLog.log.debug(#function)
         guard let tokenField = obj.object as? NSTokenField,
@@ -38,8 +49,8 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         guard let taggableElement else { fatalError("set taggableElement first") }
 
         // TODO: need to know which chars are actually typed, which chars are complemented?
-        
-        let oldTagStrArray = taggableElement.tags.map({ $0.displayName })
+
+        let oldTagStrArray = tagsFrom(element: taggableElement).map({ $0.displayName })
 
         if !oldTagStrArray.sameContents(stringArray) {
             tokenField.backgroundColor = .selectedTextBackgroundColor
@@ -52,23 +63,27 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         OSLog.log.debug("controlTextDidChange \(obj)")
         guard let tokenField = obj.object as? NSTokenField,
               let stringArray = tokenField.objectValue as? [String] else { return }
-        let tags = stringArray.compactMap({ selectableTags.firstTag(name: $0) })
+        let refTags = stringArray.compactMap({ selectableTags.firstTag(name: $0) })
 
         guard let taggableElement = taggableElement else { fatalError("set taggableElement first") }
-        let oldTagStrArray = taggableElement.tags.map({ $0.displayName })
+        let oldTagStrArray = tagsFrom(element: taggableElement).map({ $0.displayName })
         
         if !oldTagStrArray.sameContents(stringArray) {
-            updateElement(Set(tags))
+            updateElement(Set(refTags))
         }
         tokenField.backgroundColor = .textBackgroundColor
         let notification = Notification(name: editableTagFocusLooseRequestNotification)
         NotificationCenter.default.post(notification)
     }
     
-    func updateElement(_ tags: Set<E.TagType>) {
+    func updateElement(_ refTags: Set<E.TagType>) {
         guard var taggableElement = taggableElement else { fatalError("set taggableElement first") }
         needsUpdate.send(true)
-        taggableElement.tags = tags
+        if let getSet = getSet {
+            getSet.setter(taggableElement, refTags)
+        } else {
+            taggableElement.refTags = refTags
+        }
     }
 
     public func tokenField(_ tokenField: NSTokenField, completionsForSubstring substring: String,

@@ -17,8 +17,12 @@ extension OSLog {
     //fileprivate static var log = Logger(.disabled)
 }
 
+public typealias EditableTagGet<E: Taggable> = (E) -> Set<E.TagType>
+public typealias EditableTagGetSet<E: Taggable> = (getter: (E) -> Set<E.TagType>, setter: (E, Set<E.TagType>) -> Void)
+
 public struct EditableTag<T: Taggable & ObservableObject>: View {
     @ObservedObject var element: T
+    let getSet: EditableTagGetSet<T>?
     let selectableTags: [T.TagType]
     let alignment: Alignment
     @State private var underEditing = false {
@@ -29,14 +33,15 @@ public struct EditableTag<T: Taggable & ObservableObject>: View {
     let placeholder: String?
     let editIcon: Image
     
-    public init(element: T, selectableTags: [T.TagType],
-                //value: Binding<String>,
+    public init(element: T, 
+                getSet: EditableTagGetSet<T>? = nil,
+                selectableTags: [T.TagType],
                 placeholder: String? = nil,
                 editIcon: Image = Image(systemName: "pencil"),
                 editClick: Int = 1, alignment: Alignment = .leading) {
         self.element = element
+        self.getSet = getSet
         self.selectableTags = selectableTags
-        //self._value = value
         self.placeholder = placeholder
         self.editIcon = editIcon
         self.alignment = alignment
@@ -46,12 +51,12 @@ public struct EditableTag<T: Taggable & ObservableObject>: View {
     public var body: some View {
         HStack {
             if underEditing {
-                TagField(element: element, selectableTags: selectableTags, placeholder: placeholder)
+                TagField(element: element, getSet: getSet, selectableTags: selectableTags, placeholder: placeholder)
                     .focused($fieldFocus)
                     .onSubmit { underEditing.toggle(); print("toggle") } // never called
             } else {
-                TagView(element: element)
-                //                Text(value)
+                let getter = (getSet == nil) ? nil : getSet!.getter
+                TagView(element: element, getter: getter)
                     .frame(maxWidth: .infinity, alignment: alignment)
                     .contentShape(Rectangle())
                     .onTapGesture(count: editClick, perform: { underEditing.toggle() })

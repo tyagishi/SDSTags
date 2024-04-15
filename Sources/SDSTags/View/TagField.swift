@@ -15,7 +15,6 @@ extension OSLog {
     fileprivate static var log = Logger(.disabled)
 }
 
-
 #if os(macOS)
 public struct TagField<E: Taggable>: NSViewRepresentable {
     public typealias NSViewType = NSTokenField
@@ -24,10 +23,12 @@ public struct TagField<E: Taggable>: NSViewRepresentable {
     let placeholder: String?
     var cancellable: AnyCancellable? = nil
 
-    public init(element: E, selectableTags: [E.TagType], placeholder: String? = nil) {
+    public init(element: E,
+                getSet: EditableTagGetSet<E>?,
+                selectableTags: [E.TagType], placeholder: String? = nil) {
         OSLog.log.debug(#function)
         self.element = element
-        self.tagFieldDelegate = TagFieldDelegate(selectableTags: selectableTags)
+        self.tagFieldDelegate = TagFieldDelegate(selectableTags: selectableTags, getSet: getSet)
         self.placeholder = placeholder
     }
 
@@ -35,7 +36,7 @@ public struct TagField<E: Taggable>: NSViewRepresentable {
         OSLog.log.debug(#function)
         let tokenField = NSTokenField()
         tagFieldDelegate.taggableElement = element
-        tokenField.objectValue = element.tags.map({ $0.displayName })
+        tokenField.objectValue = element.refTags.map({ $0.displayName })
         tokenField.delegate = tagFieldDelegate
 //        tokenField.placeholderString = placeholder
         return tokenField
@@ -44,7 +45,7 @@ public struct TagField<E: Taggable>: NSViewRepresentable {
     public func updateNSView(_ tokenField: NSTokenField, context: Context) {
         // OSLog.log.debug(#function)
         tagFieldDelegate.taggableElement = element
-        tokenField.objectValue = element.tags.map({ $0.displayName })
+        tokenField.objectValue = element.refTags.map({ $0.displayName })
         tokenField.delegate = tagFieldDelegate
 //        tokenField.placeholderString = placeholder
     }
