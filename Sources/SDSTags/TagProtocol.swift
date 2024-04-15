@@ -18,9 +18,6 @@ public extension Taggable {
     var displayTags: [TagType] {
         Array(refTags)
     }
-    var tagArray: [TagType] {
-        refTags.sorted(by: { $0.displayName < $1.displayName })
-    }
 
     func hasTag(_ tag: TagType) -> Bool {
         refTags.contains(where: { $0.id == tag.id })
