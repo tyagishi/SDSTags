@@ -13,8 +13,8 @@ import OSLog
 let editableTagFocusLooseRequestNotification = Notification.Name("EditableTagFocusLooseRequestNotification")
 
 extension OSLog {
-    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "EditableTag")
-    //fileprivate static var log = Logger(.disabled)
+    //fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "EditableTag")
+    fileprivate static var log = Logger(.disabled)
 }
 
 public typealias EditableTagGet<E: Taggable> = (E) -> [E.TagType]
@@ -25,15 +25,16 @@ public struct EditableTag<T: Taggable & ObservableObject>: View {
     let getSet: EditableTagGetSet<T>?
     let selectableTags: [T.TagType]
     let alignment: Alignment
+    let editClick: Int
+    let placeholder: String?
+    let editIcon: Image
+
     @State private var underEditing = false {
         didSet { if underEditing { fieldFocus = true } }
     }
     @FocusState private var fieldFocus: Bool
-    let editClick: Int
-    let placeholder: String?
-    let editIcon: Image
-    
-    public init(element: T, 
+
+    public init(element: T,
                 getSet: EditableTagGetSet<T>? = nil,
                 selectableTags: [T.TagType],
                 placeholder: String? = nil,
@@ -61,17 +62,18 @@ public struct EditableTag<T: Taggable & ObservableObject>: View {
                     .contentShape(Rectangle())
                     .onTapGesture(count: editClick, perform: { underEditing.toggle() })
             }
-            Button(action: { underEditing.toggle() }, label: { editIcon })
+            if editClick < Int.max {
+                Button(action: { underEditing.toggle() }, label: { editIcon })
+            }
         }
         .onChange(of: fieldFocus) {
             if !fieldFocus { underEditing = false }
         }
-        .onReceive(NotificationCenter.default.publisher(for: editableTagFocusLooseRequestNotification)) { notification in
+        .onReceive(NotificationCenter.default.publisher(for: editableTagFocusLooseRequestNotification)) { _ in
             OSLog.log.debug("onReceive")
             underEditing = false
             fieldFocus = false
         }
-//        .onReceive(NotificationCenter.publisher.
 //        .overlay {
 //            if !underEditing,
 //               element.tags.isEmpty,
