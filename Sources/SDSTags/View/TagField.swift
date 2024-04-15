@@ -19,6 +19,7 @@ extension OSLog {
 public struct TagField<E: Taggable>: NSViewRepresentable {
     public typealias NSViewType = NSTokenField
     let element: E
+    let getSet: EditableTagGetSet<E>?
     let tagFieldDelegate: TagFieldDelegate<E>
     let placeholder: String?
     var cancellable: AnyCancellable? = nil
@@ -28,6 +29,7 @@ public struct TagField<E: Taggable>: NSViewRepresentable {
                 selectableTags: [E.TagType], placeholder: String? = nil) {
         OSLog.log.debug(#function)
         self.element = element
+        self.getSet = getSet
         self.tagFieldDelegate = TagFieldDelegate(selectableTags: selectableTags, getSet: getSet)
         self.placeholder = placeholder
     }
@@ -36,7 +38,7 @@ public struct TagField<E: Taggable>: NSViewRepresentable {
         OSLog.log.debug(#function)
         let tokenField = NSTokenField()
         tagFieldDelegate.taggableElement = element
-        tokenField.objectValue = element.refTags.map({ $0.displayName })
+        tokenField.objectValue = tagNames()
         tokenField.delegate = tagFieldDelegate
 //        tokenField.placeholderString = placeholder
         return tokenField
@@ -45,9 +47,16 @@ public struct TagField<E: Taggable>: NSViewRepresentable {
     public func updateNSView(_ tokenField: NSTokenField, context: Context) {
         // OSLog.log.debug(#function)
         tagFieldDelegate.taggableElement = element
-        tokenField.objectValue = element.refTags.map({ $0.displayName })
+        tokenField.objectValue = tagNames()
         tokenField.delegate = tagFieldDelegate
 //        tokenField.placeholderString = placeholder
+    }
+    
+    func tagNames() -> [String] {
+        if let getSet = getSet {
+            return getSet.getter(element).map({ $0.displayName })
+        }
+        return element.displayTags.map({ $0.displayName })
     }
 }
 #else
