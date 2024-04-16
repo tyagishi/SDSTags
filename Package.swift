@@ -17,6 +17,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/tyagishi/SDSCustomView.git", from: "3.4.0"),
         .package(url: "https://github.com/realm/SwiftLint.git", from: "0.54.0"),
     ],
     targets: [
@@ -24,6 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "SDSTags",
+            dependencies: ["SDSCustomView"],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]),

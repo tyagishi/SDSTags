@@ -28,7 +28,12 @@ struct ContentView: View {
                 //TagField(element: item, selectableTags: tags)
                 EditableTag(element: item, selectableTags: tags, placeholder: "Order")
             }
-            TagView(element: item)
+            Group {
+                HStack {
+                    Text("Current Tags: ")
+                    TagView(element: item)
+                }
+            }
             List($items) { $item in
                 HStack {
                     EditableText(value: $item.title)
@@ -54,7 +59,7 @@ struct ContentView: View {
 }
 
 extension OSLog {
-    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "tagfield")
+    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "exampleApp")
 }
 
 struct Tag: TagProtocol, Hashable {
@@ -70,13 +75,13 @@ struct Tag: TagProtocol, Hashable {
 class TaggableItem: Taggable, Identifiable, ObservableObject {
     typealias TagType = Tag
     var id: String { self.title }
-    @Published var tags: Set<TagType>
+    @Published var refTags: Set<TagType>
     
     @Published var title: String
     
     init(title: String, tags: Set<TagType>) {
         self.title = title
-        self.tags = tags
+        self.refTags = tags
     }
 }
 
