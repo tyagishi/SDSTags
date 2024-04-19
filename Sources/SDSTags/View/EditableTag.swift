@@ -20,8 +20,8 @@ extension OSLog {
 public typealias EditableTagGet<E: Taggable> = (E) -> [E.TagType]
 public typealias EditableTagGetSet<E: Taggable> = (getter: (E) -> [E.TagType], setter: (E, Set<E.TagType>) -> Void)
 
-public struct EditableTag<T: Taggable & ObservableObject>: View {
-    @ObservedObject var element: T
+public struct EditableTag<T: Taggable>: View {
+    let element: T
     let getSet: EditableTagGetSet<T>?
     let selectableTags: [T.TagType]
     let alignment: Alignment

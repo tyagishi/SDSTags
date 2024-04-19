@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-public struct TagView<T: Taggable & ObservableObject>: View {
-    @ObservedObject var element: T
+public struct TagView<T: Taggable>: View {
+    let element: T
     let getter: EditableTagGet<T>?
     
     let cornerRadius = 3.0
