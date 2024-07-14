@@ -11,8 +11,8 @@ import SwiftUI
 import OSLog
 
 extension OSLog {
-    //fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "TagFieldDelegate")
-    fileprivate static var log = Logger(.disabled)
+    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "TagFieldDelegate")
+    // fileprivate static var log = Logger(.disabled)
 }
 
 #if os(macOS)
@@ -76,6 +76,12 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         NotificationCenter.default.post(notification)
     }
     
+    public func tokenField(_ tokenField: NSTokenField, displayStringForRepresentedObject representedObject: Any) -> String? {
+        OSLog.log.debug(#function)
+        if let string = representedObject as? String { return string }
+        return nil
+    }
+    
     func updateElement(_ refTags: Set<E.TagType>) {
         guard var taggableElement = taggableElement else { fatalError("set taggableElement first") }
         needsUpdate.send(true)
@@ -94,26 +100,30 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         let restTagNames = selectableTags.map({ $0.displayName }).filter({ !strings.contains($0) })
 
         // MARK: may need to be controlled from outside (like case sensitive?, checking prefix is too much?, need to hide unrelated?, ...)
+        var prio0: [String] = []
         var prio1: [String] = []
         var prio2: [String] = []
         var prio3: [String] = []
         for name in restTagNames {
-            if name.hasSuffix(substring) { prio1.append(name)
+            if name.hasPrefix(substring) { prio0.append(name)
+            } else if name.capitalized.hasPrefix(substring.capitalized) { prio1.append(name)
             } else if name.contains(substring) { prio2.append(name)
             } else { prio3.append(name)}
         }
-        
+
+        prio0.sort()
         prio1.sort()
         prio2.sort()
         prio3.sort()
 
-        let completion = prio1 + prio2 + prio3
+        let completion = prio0 + prio1 + prio2 + prio3
         
         guard !completion.isEmpty else { return [noCompletionString] }
         return completion
     }
     
     public func tokenField(_ tokenField: NSTokenField, editingStringForRepresentedObject representedObject: Any) -> String? {
+        OSLog.log.debug(#function)
         if let repre = representedObject as? String? { return repre }
         return nil
     }
