@@ -26,4 +26,3 @@ public struct OptionalTagPicker<T: TagProtocol>: View {
         }, label: { Text("Tag") })
     }
 }
-
