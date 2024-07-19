@@ -11,8 +11,8 @@ import SwiftUI
 import OSLog
 
 extension OSLog {
-    fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "TagFieldDelegate")
-    // fileprivate static var log = Logger(.disabled)
+    // fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "TagFieldDelegate")
+    fileprivate static var log = Logger(.disabled)
 }
 
 #if os(macOS)
@@ -60,7 +60,7 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     }
 
     public func controlTextDidEndEditing(_ obj: Notification) {
-        OSLog.log.debug("controlTextDidChange \(obj)")
+        OSLog.log.debug("controlTextDidEndEditing \(obj)")
         guard let tokenField = obj.object as? NSTokenField,
               let stringArray = tokenField.objectValue as? [String] else { return }
         let refTags = stringArray.compactMap({ selectableTags.firstTag(name: $0) })
@@ -78,7 +78,8 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     
     public func tokenField(_ tokenField: NSTokenField, displayStringForRepresentedObject representedObject: Any) -> String? {
         OSLog.log.debug(#function)
-        if let string = representedObject as? String { return string }
+        if let string = representedObject as? String { OSLog.log.debug("return \(string)"); return string }
+        OSLog.log.debug("return nil")
         return nil
     }
     
@@ -117,6 +118,14 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         prio3.sort()
 
         let completion = prio0 + prio1 + prio2 + prio3
+        
+        var selectionIndex = -1
+        let prefixMatches = completion.filter({ $0.hasPrefix(substring) })
+        if prefixMatches.count == 1,
+           let index = completion.firstIndex(where: { $0.hasPrefix(substring) }) {
+            selectionIndex = index
+        }
+        selectedIndex?.pointee = selectionIndex
         
         guard !completion.isEmpty else { return [noCompletionString] }
         return completion
