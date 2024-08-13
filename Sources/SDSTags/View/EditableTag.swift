@@ -66,9 +66,9 @@ public struct EditableTag<T: Taggable>: View {
                 Button(action: { underEditing.toggle() }, label: { editIcon })
             }
         }
-        .onChange(of: fieldFocus) {
+        .onChange(of: fieldFocus, perform: { _ in 
             if !fieldFocus { underEditing = false }
-        }
+        })
         .onReceive(NotificationCenter.default.publisher(for: editableTagFocusLooseRequestNotification)) { _ in
             OSLog.log.debug("onReceive")
             underEditing = false
