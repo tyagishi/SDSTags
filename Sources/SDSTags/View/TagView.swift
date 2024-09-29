@@ -11,9 +11,6 @@ public struct TagView<T: Taggable>: View {
     let element: T
     let getter: EditableTagGet<T>?
     
-    let cornerRadius = 3.0
-    let lineWidth = 0.5
-    
     public init(element: T, getter: EditableTagGet<T>? = nil) {
         self.element = element
         self.getter = getter
@@ -23,15 +20,7 @@ public struct TagView<T: Taggable>: View {
         // TODO: should be able to custom shape stype
         HStack {
             ForEach(Array(tagsFrom(element: element))) { tag in
-                Text(tag.displayName)
-                    .padding(.horizontal, 2)
-                    .padding(.vertical, 1)
-                    .background(.blue.opacity(0.3))
-                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .stroke(.cyan, lineWidth: lineWidth)
-                    )
+                TagTokenView(tag.displayName)
             }
         }
     }

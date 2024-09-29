@@ -3,17 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		36124D952BC7F06E00AF78A5 /* SDSCustomView in Frameworks */ = {isa = PBXBuildFile; productRef = 36124D942BC7F06E00AF78A5 /* SDSCustomView */; };
+		365917542CA8E39A001DB013 /* SDSTags in Frameworks */ = {isa = PBXBuildFile; productRef = 365917532CA8E39A001DB013 /* SDSTags */; };
 		36D601F92BC666A9003C560D /* SDSTagsExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */; };
 		36D601FB2BC666A9003C560D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D601FA2BC666A9003C560D /* ContentView.swift */; };
 		36D601FD2BC666AB003C560D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36D601FC2BC666AB003C560D /* Assets.xcassets */; };
 		36D602012BC666AB003C560D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36D602002BC666AB003C560D /* Preview Assets.xcassets */; };
-		36D6020A2BC6675B003C560D /* SDSTags in Frameworks */ = {isa = PBXBuildFile; productRef = 36D602092BC6675B003C560D /* SDSTags */; };
-		36D6020D2BC6AC72003C560D /* SDSView in Frameworks */ = {isa = PBXBuildFile; productRef = 36D6020C2BC6AC72003C560D /* SDSView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,9 +30,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36D6020D2BC6AC72003C560D /* SDSView in Frameworks */,
+				365917542CA8E39A001DB013 /* SDSTags in Frameworks */,
 				36124D952BC7F06E00AF78A5 /* SDSCustomView in Frameworks */,
-				36D6020A2BC6675B003C560D /* SDSTags in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,9 +100,8 @@
 			);
 			name = SDSTagsExample;
 			packageProductDependencies = (
-				36D602092BC6675B003C560D /* SDSTags */,
-				36D6020C2BC6AC72003C560D /* SDSView */,
 				36124D942BC7F06E00AF78A5 /* SDSCustomView */,
+				365917532CA8E39A001DB013 /* SDSTags */,
 			);
 			productName = SDSTagsExample;
 			productReference = 36D601F52BC666A9003C560D /* SDSTagsExample.app */;
@@ -135,8 +132,8 @@
 			);
 			mainGroup = 36D601EC2BC666A9003C560D;
 			packageReferences = (
-				36D6020B2BC6AC72003C560D /* XCRemoteSwiftPackageReference "SDSView" */,
 				36124D932BC7F06E00AF78A5 /* XCRemoteSwiftPackageReference "SDSCustomView" */,
+				365917522CA8E39A001DB013 /* XCLocalSwiftPackageReference "../../SDSTags" */,
 			);
 			productRefGroup = 36D601F62BC666A9003C560D /* Products */;
 			projectDirPath = "";
@@ -385,6 +382,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		365917522CA8E39A001DB013 /* XCLocalSwiftPackageReference "../../SDSTags" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../SDSTags;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		36124D932BC7F06E00AF78A5 /* XCRemoteSwiftPackageReference "SDSCustomView" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -392,14 +396,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.2.0;
-			};
-		};
-		36D6020B2BC6AC72003C560D /* XCRemoteSwiftPackageReference "SDSView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tyagishi/SDSView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -410,14 +406,9 @@
 			package = 36124D932BC7F06E00AF78A5 /* XCRemoteSwiftPackageReference "SDSCustomView" */;
 			productName = SDSCustomView;
 		};
-		36D602092BC6675B003C560D /* SDSTags */ = {
+		365917532CA8E39A001DB013 /* SDSTags */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SDSTags;
-		};
-		36D6020C2BC6AC72003C560D /* SDSView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 36D6020B2BC6AC72003C560D /* XCRemoteSwiftPackageReference "SDSView" */;
-			productName = SDSView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

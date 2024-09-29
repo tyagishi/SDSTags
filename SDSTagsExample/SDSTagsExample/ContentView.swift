@@ -8,8 +8,6 @@
 import SwiftUI
 import SDSTags
 import OSLog
-import SDSNSUIBridge
-import SDSView
 import SDSCustomView
 import Combine
 
@@ -22,6 +20,7 @@ struct ContentView: View {
     @State private var index = 1
     var body: some View {
         VStack {
+            TagTokenView(tags[0].displayName)
             HStack {
                 EditableText(value: $item.title)
                 //Text("Item title: \(item.title) tags:")
