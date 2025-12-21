@@ -89,7 +89,7 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
         if let getSet = getSet {
             getSet.setter(taggableElement, refTags)
         } else {
-            taggableElement.refTags = refTags
+            taggableElement.updateTags(refTags)
         }
     }
 

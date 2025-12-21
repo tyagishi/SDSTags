@@ -15,7 +15,7 @@ public struct TagView<T: Taggable>: View {
         self.element = element
         self.getter = getter
     }
-    
+
     public var body: some View {
         // TODO: should be able to custom shape stype
         HStack {
