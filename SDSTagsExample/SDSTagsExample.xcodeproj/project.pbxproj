@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		36124D952BC7F06E00AF78A5 /* SDSCustomView in Frameworks */ = {isa = PBXBuildFile; productRef = 36124D942BC7F06E00AF78A5 /* SDSCustomView */; };
 		365917542CA8E39A001DB013 /* SDSTags in Frameworks */ = {isa = PBXBuildFile; productRef = 365917532CA8E39A001DB013 /* SDSTags */; };
+		36862CAB2FDE34640016E203 /* ExampleTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36862CAA2FDE34640016E203 /* ExampleTag.swift */; };
 		369248C02E324AA0002C344D /* TagTokenField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369248BF2E324AA0002C344D /* TagTokenField.swift */; };
 		369248C42E3261ED002C344D /* SDSMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 369248C32E3261ED002C344D /* SDSMacros */; };
 		36D601F92BC666A9003C560D /* SDSTagsExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		36862CAA2FDE34640016E203 /* ExampleTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleTag.swift; sourceTree = "<group>"; };
 		369248BF2E324AA0002C344D /* TagTokenField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTokenField.swift; sourceTree = "<group>"; };
 		36D601F52BC666A9003C560D /* SDSTagsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDSTagsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDSTagsExampleApp.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			children = (
 				36D601F82BC666A9003C560D /* SDSTagsExampleApp.swift */,
 				36D601FA2BC666A9003C560D /* ContentView.swift */,
+				36862CAA2FDE34640016E203 /* ExampleTag.swift */,
 				369248BF2E324AA0002C344D /* TagTokenField.swift */,
 				36D601FC2BC666AB003C560D /* Assets.xcassets */,
 				36D601FE2BC666AB003C560D /* SDSTagsExample.entitlements */,
@@ -168,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36862CAB2FDE34640016E203 /* ExampleTag.swift in Sources */,
 				36D601FB2BC666A9003C560D /* ContentView.swift in Sources */,
 				36D601F92BC666A9003C560D /* SDSTagsExampleApp.swift in Sources */,
 				369248C02E324AA0002C344D /* TagTokenField.swift in Sources */,
@@ -411,7 +415,7 @@
 			repositoryURL = "https://github.com/tyagishi/SDSCustomView";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.2.0;
+				minimumVersion = 4.6.4;
 			};
 		};
 		369248C22E3261EC002C344D /* XCRemoteSwiftPackageReference "SDSMacros" */ = {
@@ -419,7 +423,7 @@
 			repositoryURL = "https://github.com/tyagishi/SDSMacros";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.1;
+				minimumVersion = 3.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

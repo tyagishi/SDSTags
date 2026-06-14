@@ -11,46 +11,49 @@ import OSLog
 import SDSCustomView
 import Combine
 
-let tags: [Tag] = [ Tag("SoftDrink"), Tag("Water"), Tag("Coffee"), Tag("BlackTea"), Tag("GreenTea"),  Tag("Beer") ]
-let prefixTags: [Tag] = [ Tag("01SoftDrink"), Tag("01Water"), Tag("02Coffee"), Tag("02BlackTea"), Tag("02GreenTea"),  Tag("03Beer") ]
+let prefixTags: [ExampleTag] = [ ExampleTag("01SoftDrink"), ExampleTag("01Water"), ExampleTag("02Coffee"), ExampleTag("02BlackTea"), ExampleTag("02GreenTea"),  ExampleTag("03Beer") ]
 
-let prefixMap: [String: Color] = ["01": Color.blue,
-                                  "02": Color.purple,
-                                  "03": Color.red]
+let prefixMap: [String: (name: String, color: Color)] = ["01": ("waterbottole", Color.blue),
+                                                         "02": ("cup.and.saucer", Color.purple),
+                                                         "03": ("mug", Color.red)]
 
 struct ContentView: View {
     
-    @State private var taggableElement = TaggableItem(title: "Item", tags: Set(tags))
-    @State private var prefixedTaggableElement = TaggableItem(title: "Item", tags: Set(prefixTags))
+    @State private var taggableElement = TaggableItem(title: "Item", tags: Set(prefixTags))
 
     var body: some View {
         VStack {
-            GroupBox("TagTokenView", content: {
-                ForEach(tags) { tag in
-                    TagTokenView(tag.displayName)
-                }
-            })
-            GroupBox("TagView", content: {
-                TagView(element: taggableElement)
-            })
-            GroupBox("TagTokenView with ColorMap", content: {
+            GroupBox("TagTokenViews", content: {
                 ForEach(prefixTags) { tag in
-                    TagTokenView(tag.displayName, colorMap: { text in
-                        prefixColor(text, prefixMap)
-                    }).lineLimit(1)
+                    TagTokenView(tag, iconMap: { tag in
+                        return iconMap(tag)
+                    }, colorMap: { tag in
+                        prefixColor(tag.displayName, prefixMap)
+                    })
                 }
             })
-            GroupBox("TagView with ColorMap", content: {
-                TagView(element: prefixedTaggableElement, colorMap: { text in prefixColor(text, prefixMap) })
+            GroupBox("TagView from TaggableElement", content: {
+                TagView(element: taggableElement,
+                        iconMap: { tag in
+                    iconMap(tag)
+                }, colorMap: { tag in prefixColor(tag.displayName, prefixMap) })
             })
         }
     }
     
-    func prefixColor(_ string: String,_ colorMap: [String: Color]) -> Color {
+    func prefixColor(_ string: String,_ colorMap: [String: (name: String, color: Color)]) -> Color {
         for pre in colorMap.keys {
-            if string.hasPrefix(pre) { return colorMap[pre] ?? .blue }
+            if string.hasPrefix(pre) { return colorMap[pre]?.color ?? .blue }
         }
         return .blue
+    }
+    
+    func iconMap<T: TagProtocol>(_ tag: T) -> AnyView {
+        if tag.displayName.contains("Tea") ||
+            tag.displayName.contains("Coffee") { return AnyView(Image(systemName: "cup.and.saucer")) }
+        if tag.displayName.contains("Beer") { return AnyView(Image(systemName: "mug")) }
+        if tag.displayName.contains("Water") { return AnyView(Image(systemName: "waterbottle")) }
+        return AnyView(Image(systemName: "wineglass"))
     }
 }
 
@@ -61,7 +64,7 @@ struct TextFieldWithSuggestionsView: View {
     @State private var changeState = false
     @State private var index = 1
     
-    @State private var selectedTagIDs: Set<Tag.ID> = []
+    @State private var selectedTagIDs: Set<ExampleTag.ID> = []
     
     @State private var fieldText: String = "Hello"
 
@@ -80,13 +83,13 @@ struct TextFieldWithSuggestionsView: View {
 //                    return new
 //                })
 //            }
-            TagTokenField(selectedTokenIDs: $selectedTagIDs, tags: tags)
-            TagTokenView(tags[0].displayName)
+            TagTokenField(selectedTokenIDs: $selectedTagIDs, tags: prefixTags)
+            TagTokenView(prefixTags[0])
             HStack {
                 EditableText(value: $item.title)
                 //Text("Item title: \(item.title) tags:")
-                //TagField(element: item, selectableTags: tags)
-                EditableTag(element: item, selectableTags: tags, placeholder: "Order")
+                //TagField(element: item, selectableTags: prefixTags)
+                EditableTag(element: item, selectableTags: prefixTags, placeholder: "Order")
             }
             Group {
                 HStack {
@@ -98,7 +101,7 @@ struct TextFieldWithSuggestionsView: View {
                 HStack {
                     EditableText(value: $item.title)
                         .indirectEdit()
-                    EditableTag(element: item, selectableTags: tags)
+                    EditableTag(element: item, selectableTags: prefixTags)
                 }
             }
             .scrollContentBackground(.hidden)
@@ -122,18 +125,8 @@ extension OSLog {
     fileprivate static var log = Logger(subsystem: "com.smalldesksoftware.sdstags", category: "exampleApp")
 }
 
-struct Tag: TagProtocol, Hashable {
-    let id: UUID = UUID()
-    var displayName: String
-    
-    init(_ name: String) {
-        displayName = name
-    }
-}
-
-
 class TaggableItem: Taggable, Identifiable, ObservableObject {
-    typealias TagType = Tag
+    typealias TagType = ExampleTag
     var id: String { self.title }
     @Published var refTags: Set<TagType>
     
@@ -144,11 +137,11 @@ class TaggableItem: Taggable, Identifiable, ObservableObject {
         self.refTags = tags
     }
     
-    func addTag(_ addTag: Tag) {
+    func addTag(_ addTag: ExampleTag) {
         refTags.insert(addTag)
     }
     
-    func removeTag(_ removeTag: Tag) {
+    func removeTag(_ removeTag: ExampleTag) {
         refTags.remove(removeTag)
     }
 }
