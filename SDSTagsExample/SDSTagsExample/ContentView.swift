@@ -12,10 +12,45 @@ import SDSCustomView
 import Combine
 
 let tags: [Tag] = [ Tag("SoftDrink"), Tag("Water"), Tag("Coffee"), Tag("BlackTea"), Tag("GreenTea"),  Tag("Beer") ]
+let prefixTags: [Tag] = [ Tag("01SoftDrink"), Tag("01Water"), Tag("02Coffee"), Tag("02BlackTea"), Tag("02GreenTea"),  Tag("03Beer") ]
+
+let prefixMap: [String: Color] = ["01": Color.blue,
+                                  "02": Color.purple,
+                                  "03": Color.red]
 
 struct ContentView: View {
+    
+    @State private var taggableElement = TaggableItem(title: "Item", tags: Set(tags))
+    @State private var prefixedTaggableElement = TaggableItem(title: "Item", tags: Set(prefixTags))
+
     var body: some View {
-        Text("Hello")
+        VStack {
+            GroupBox("TagTokenView", content: {
+                ForEach(tags) { tag in
+                    TagTokenView(tag.displayName)
+                }
+            })
+            GroupBox("TagView", content: {
+                TagView(element: taggableElement)
+            })
+            GroupBox("TagTokenView with ColorMap", content: {
+                ForEach(prefixTags) { tag in
+                    TagTokenView(tag.displayName, colorMap: { text in
+                        prefixColor(text, prefixMap)
+                    }).lineLimit(1)
+                }
+            })
+            GroupBox("TagView with ColorMap", content: {
+                TagView(element: prefixedTaggableElement, colorMap: { text in prefixColor(text, prefixMap) })
+            })
+        }
+    }
+    
+    func prefixColor(_ string: String,_ colorMap: [String: Color]) -> Color {
+        for pre in colorMap.keys {
+            if string.hasPrefix(pre) { return colorMap[pre] ?? .blue }
+        }
+        return .blue
     }
 }
 
@@ -33,18 +68,18 @@ struct TextFieldWithSuggestionsView: View {
     var body: some View {
         VStack {
             MyContentView()
-            if #available(macOS 15, *) {
-                TextFieldWithSuggestions($fieldText, suggestions: { _ in
-                    ["Hello", "World", "Hallo"]
-                }, trigger: { trigValue in
-                    print(trigValue)
-                    if trigValue != "a" { return false }
-                    return true
-                }, handler: { (prev, new) in
-                    print("prev: \(prev) new: \(new)")
-                    return new
-                })
-            }
+//            if #available(macOS 15, *) {
+//                TextFieldWithSuggestions($fieldText, suggestions: { _ in
+//                    ["Hello", "World", "Hallo"]
+//                }, trigger: { trigValue in
+//                    print(trigValue)
+//                    if trigValue != "a" { return false }
+//                    return true
+//                }, handler: { (prev, new) in
+//                    print("prev: \(prev) new: \(new)")
+//                    return new
+//                })
+//            }
             TagTokenField(selectedTokenIDs: $selectedTagIDs, tags: tags)
             TagTokenView(tags[0].displayName)
             HStack {
@@ -107,6 +142,14 @@ class TaggableItem: Taggable, Identifiable, ObservableObject {
     init(title: String, tags: Set<TagType>) {
         self.title = title
         self.refTags = tags
+    }
+    
+    func addTag(_ addTag: Tag) {
+        refTags.insert(addTag)
+    }
+    
+    func removeTag(_ removeTag: Tag) {
+        refTags.remove(removeTag)
     }
 }
 

@@ -12,21 +12,27 @@ public struct TagTokenView: View {
     
     let cornerRadius = 3.0
     let lineWidth = 0.5
-    
-    public init(_ text: String) {
+    let colorMap: ((String) -> Color)?
+
+    public init(_ text: String, colorMap: ((String) -> Color)? = nil) {
         self.text = text
+        self.colorMap = colorMap
     }
     
     public var body: some View {
         Text(text)
             .padding(.horizontal, 2)
             .padding(.vertical, 1)
-            .background(.blue.opacity(0.3))
+            .background(bgColor.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(.cyan, lineWidth: lineWidth)
+                    .stroke(bgColor, lineWidth: lineWidth)
             )
+    }
+    
+    var bgColor: Color {
+        colorMap?(text) ?? .blue
     }
 }
 

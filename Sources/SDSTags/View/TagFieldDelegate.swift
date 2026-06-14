@@ -84,7 +84,7 @@ public class TagFieldDelegate<E: Taggable>: NSObject, NSTokenFieldDelegate {
     }
     
     func updateElement(_ refTags: Set<E.TagType>) {
-        guard var taggableElement = taggableElement else { fatalError("set taggableElement first") }
+        guard let taggableElement = taggableElement else { fatalError("set taggableElement first") }
         needsUpdate.send(true)
         if let getSet = getSet {
             getSet.setter(taggableElement, refTags)

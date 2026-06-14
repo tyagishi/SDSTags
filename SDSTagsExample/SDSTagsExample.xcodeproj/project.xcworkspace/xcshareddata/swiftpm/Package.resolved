@@ -1,12 +1,22 @@
 {
+  "originHash" : "4fab8e96a6b257bee2928196cab96fe36c481507bcb2db3d59baa3f68daeff12",
   "pins" : [
     {
       "identity" : "sdscgextension",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tyagishi/SDSCGExtension",
       "state" : {
-        "revision" : "ec556ea951b3b6300e60614f0148015663b2368d",
-        "version" : "1.3.5"
+        "revision" : "d029e1c450dbcf2c362bd2cac2f640525af78868",
+        "version" : "1.3.6"
+      }
+    },
+    {
+      "identity" : "sdscustomview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tyagishi/SDSCustomView",
+      "state" : {
+        "revision" : "077c9c0faf235e41654a638702a7d2950825361f",
+        "version" : "3.10.3"
       }
     },
     {
@@ -14,17 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tyagishi/SDSDataStructure",
       "state" : {
-        "revision" : "23e30c9def89d8e59ac8169b1ec2cfe30f0a0c91",
-        "version" : "4.0.12"
-      }
-    },
-    {
-      "identity" : "sdsfoundationextension",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tyagishi/SDSFoundationExtension",
-      "state" : {
-        "revision" : "99abea726ba1b12208b90607f9704279bb254140",
-        "version" : "1.3.3"
+        "revision" : "929ec6a041cefbcbe412da49541d391a1819da0a",
+        "version" : "3.7.0"
       }
     },
     {
@@ -34,15 +35,6 @@
       "state" : {
         "revision" : "d34f89b78be9cd07c9197400e838541cd9a8f6bb",
         "version" : "2.0.1"
-      }
-    },
-    {
-      "identity" : "sdsstringextension",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tyagishi/SDSStringExtension",
-      "state" : {
-        "revision" : "597e89e438ac4055652c5ab9b3e881a3aa2f2cfd",
-        "version" : "1.4.1"
       }
     },
     {
@@ -71,16 +63,7 @@
         "revision" : "9ad9487c2448b3f1265ea2cc8af246b9cae6878d",
         "version" : "0.56.1"
       }
-    },
-    {
-      "identity" : "viewinspector",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nalexn/ViewInspector",
-      "state" : {
-        "branch" : "0.10.0",
-        "revision" : "5acfa0a3c095ac9ad050abe51c60d1831e8321da"
-      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
