@@ -23,7 +23,7 @@ public struct TagView<T: Taggable>: View {
     public var body: some View {
         // TODO: should be able to custom shape stype
         HStack {
-            ForEach(Array(tags(from: element)).sorted(by: { $0.displayName < $1.displayName })) { tag in
+            ForEach(Array(tags(from: element))/*.sorted(by: { $0.displayName < $1.displayName })*/) { tag in
                 TagTokenView(tag, iconMap: iconMap, colorMap: colorMap)
             }
         }
